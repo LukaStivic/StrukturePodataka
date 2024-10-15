@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define ERROR_OF -1;
-#define BUFFER_SIZE 1024;
-#define MAX_BR_BODOVA 30;
+#define ERROR_OF -1
+#define BUFFER_SIZE 1024
+#define MAX_BR_BODOVA 30
 
 typedef struct {
 	char ime[20];
@@ -29,21 +29,22 @@ int openFile(char* fileName) {
 
 int main() {
 
-	char fileName = "studenti.txt";
+	char* fileName = "studenti.txt";
 	student* popisStudenata;
-	int rows = count_rows(&fileName);
+	int rows = count_rows(fileName);
 	popisStudenata = malloc(sizeof(student)*rows);
 
-	read_file(&fileName, popisStudenata, rows);
-	print_students(popisStudenata);
+	read_file(fileName, popisStudenata, rows);
+	print_students(popisStudenata, rows);
 
+	free(popisStudenata);
 	return 0;
 }
 
 int count_rows(char* fileName) {
 
 	FILE* fp = NULL;
-	char* buffer[BUFFER_SIZE] = { 0 };
+	char buffer[BUFFER_SIZE] = {0};
 	int count = 0;
 
 	fp = fopen(fileName, "r");
@@ -68,25 +69,28 @@ void read_file(char* fileName, student* popisStudenata, int rows) {
 	fp = fopen(fileName, "r");
 	if (fp == NULL) {
 		printf("File se nije otvorio pravilno.");
-		return ERROR_OF;
+		return;
 	}
 
 	int i;
 
 	for (i = 0; i < rows; i++) {
-		fscanf(fp, %s, popisStudenata[i].ime);
-		fscanf(fp, %s, popisStudenata[i].prezime);
-		fscanf(fp, %d, popisStudenata[i].bodovi[0]);
-		popisStudenata[i].bodovi[1] = popisStudenata[i].bodovi[0] / MAX_BR_BODOVA * 100;
+		fscanf(fp, "%s", popisStudenata[i].ime);
+		fscanf(fp, "%s", popisStudenata[i].prezime);
+		fscanf(fp, "%d", &popisStudenata[i].bodovi[0]);
+		popisStudenata[i].bodovi[1] = popisStudenata[i].bodovi[0] / MAX_BR_BODOVA;
+		popisStudenata[i].bodovi[1] *= 100;
 	}
+
+	fclose(fp);
 }
 
 void print_students(student* popisStudenata, int rows) {
 
-	int i, j;
+	int i;
 
 	for (i = 0; i < rows; i++) {
-		printf("%s %s %d %d", popisStudenata[i].ime, popisStudenata[i].prezime, popisStudenata[i].bodovi[0], popisStudenata[i].bodovi[1]);
+		printf("%s %s %d %d\n", popisStudenata[i].ime, popisStudenata[i].prezime, popisStudenata[i].bodovi[0], popisStudenata[i].bodovi[1]);
 	}
 
 }
