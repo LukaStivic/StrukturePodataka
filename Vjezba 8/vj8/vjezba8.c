@@ -30,6 +30,7 @@ int levelOrderIspis(Stablo root);
 int provjera(Stablo root);
 int postaviNaKraj(poz Head, poz x);
 Stablo traziMin(Stablo root);
+Stablo stvoriPrazno(Stablo root);
 
 int main() {
 
@@ -126,8 +127,10 @@ int main() {
 			printf("Neispravan unos, molim ponovite.\n");
 		}
 		check = -1;
-
 	}
+
+	stvoriPrazno(Stablo1->right);
+	free(Stablo1);
 
 
 	return EXIT_SUCCESS;
@@ -330,3 +333,13 @@ Stablo traziMin(Stablo root) {
 
 	return root;
 }
+
+Stablo stvoriPrazno(Stablo root){
+	if(root != NULL){
+		stvoriPrazno(root->left);
+		stvoriPrazno(root->right);
+		free(root);
+	}
+	return NULL;
+}
+
